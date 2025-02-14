@@ -32,10 +32,10 @@
 
 ### Изображения
 
-![304 response](./src/task1.png)
-![200 response](./src/task1.2.png)
+![Task 1, 304 response](./src/task1.png)
+![Task 1, 200 response](./src/task1.2.png)
 
-## Задание 1
+## Задание 2
 
 ### Вопрос 1
 
@@ -55,5 +55,4 @@
 
 ### Изображения
 
-![task 2](./src/task2.png)
-
+![Task 2](./src/task2.png)
