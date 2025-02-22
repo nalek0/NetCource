@@ -1,4 +1,4 @@
-# Networks Couse
+# Networks course
 
 Лабораторные работы по курсу Компьютерных сетей
 
