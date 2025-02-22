@@ -4,6 +4,6 @@
 
 ## Выполненные лабораторные
 
-| Lab#№                     | Solution                             |
-|---------------------------|--------------------------------------|
-| [Lab01](./Lab1/README.md) | [Lab01 Solution](./Lab1/SOLUTION.md) |
+| № | Title                               | Solution                       |
+|---|-------------------------------------|--------------------------------|
+| 1 | [Wireshark: HTTP](./Lab1/README.md) | [Solution](./Lab1/SOLUTION.md) |
