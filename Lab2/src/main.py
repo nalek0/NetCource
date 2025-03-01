@@ -10,41 +10,40 @@ def hello_world():
 
 @app.route("/product", methods=['POST'])
 def post_product():
+    global id_counter
     product_json = {
         "id": id_counter,
         "name": request.form['name'],
         "description": request.form['description']
     }
     products[id_counter] = product_json
+    id_counter += 1
 
     return product_json
 
-@app.route("/product/<int:product_id>", methods=['GET'])
-def get_product(product_id: int):
-    return products[product_id]
+@app.route("/product/<int:product_id>", methods=['GET', 'PUT', 'DELETE'])
+def product_api(product_id: int):
+    if request.method == 'GET':
+        return products[product_id]
+    elif request.method == 'PUT':
+        product_json = products[product_id]
 
-@app.route("/product/<int:product_id>", methods=['PUT'])
-def update_product(product_id: int):
-    product_json = products[product_id]
+        if 'name' in request.form.keys():
+            product_json['name'] = request.form['name']
 
-    if request.form['name'] is not None:
-        product_json['name'] = request.form['name']
+        if 'description' in request.form.keys():
+            product_json['description'] = request.form['description']
 
-    if request.form['description'] is not None:
-        product_json['description'] = request.form['description']
+        products[product_id] = product_json
 
-    products[product_id] = product_json
+        return product_json
+    else: # request.method == 'DELETE'
+        product_json = products.pop(product_id, {})
 
-    return product_json
-
-@app.route("/product/<int:product_id>", methods=['DELETE'])
-def remove_product(product_id: int):
-    product_json = my_dict.pop('key', None)
-
-    return product_json
+        return product_json
 
 @app.route("/products", methods=['GET'])
-def get_products():
+def products_api():
     result = []
 
     for product_json in products.values():
