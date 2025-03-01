@@ -1,8 +1,23 @@
-from flask import request, Flask
+import os
+
+from flask import send_file, request, Flask
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = 'uploaded/'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 products = {}
+icons = {}
 id_counter = 1
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 @app.route("/")
 def hello_world():
@@ -50,3 +65,20 @@ def products_api():
         result.append(product_json)
 
     return result
+
+@app.route("/product/<int:product_id>/image", methods=['GET', 'POST'])
+def product_image_api(product_id: int):
+    if request.method == 'GET':
+        return send_file(icons[product_id], as_attachment=True)
+    elif request.method == 'POST':
+        file = request.files['icon']
+
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            icons[product_id] = filepath
+
+            return ""
+        else:
+            return "", 500

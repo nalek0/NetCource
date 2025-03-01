@@ -18,3 +18,11 @@
 
 ![Step 6](./src/images/screenshot6.png)
 
+===== Далее выполнено после дедлайна =====
+
+## Задание В
+
+![Step 7](./src/images/screenshot7.png)
+
+![Step 8](./src/images/screenshot8.png)
+
