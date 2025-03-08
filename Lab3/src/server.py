@@ -52,8 +52,10 @@ def handle_client(conn, addr):
 
         print("[thread] client:", addr, "type:", type)
         print("[thread] client:", addr, "http_type:", http_type)
-        print("[thread] client:", addr, "params:", params)
-        print("[thread] client:", addr, "headers:", headers)
+        for (k, v) in params.items():
+            print("[thread] client:", addr, "params:", k, ":", v)
+        for (k, v) in headers.items():
+            print("[thread] client:", addr, "headers:", k, ":", v)
 
         if type == "GET":
             if "file" in params.keys():
@@ -90,10 +92,10 @@ def handle_client(conn, addr):
                 response_status_text = 'OK' # this can be random
 
                 # sending all this stuff
-                conn.send(f'{response_proto} {response_status} {response_status_text}'.encode())
-                conn.send(response_headers_raw.encode())
-                conn.send('\n'.encode()) # to separate headers from body
-                conn.send(response_body_raw.encode())
+                message = f"{response_proto} {response_status} {response_status_text}" + "\r\n" \
+                    + response_headers_raw + "\r\n" \
+                    + response_body_raw
+                conn.send(message.encode())
 
     conn.close()
     print("[thread] ending")
