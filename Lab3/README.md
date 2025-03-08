@@ -37,3 +37,7 @@ python3 client.py 127.0.0.1 8080 client.py
 ### Screenshots
 
 ![Client output](./src/images/screenshot3.png)
+
+## Task 4
+
+В сервер добавлен `concurrent.futures.ThreadPoolExecutor`, для ограничения количества потоков.

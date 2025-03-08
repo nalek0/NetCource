@@ -1,3 +1,5 @@
+from concurrent.futures import ThreadPoolExecutor
+
 import socket
 import threading
 import time
@@ -101,35 +103,26 @@ def handle_client(conn, addr):
     print("[thread] ending")
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print("Invalid arguments")
         exit(1)
 
-    host = '127.0.0.1'
-    port = int(sys.argv[1])
+    _, server_port, concurrency_level = sys.argv
+    server_host = '127.0.0.1'
+    server_port = int(server_port)
+    concurrency_level = int(concurrency_level)
 
     s = socket.socket()
     s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    s.bind((host, port))
+    s.bind((server_host, server_port))
     s.listen(1)
 
     all_threads = []
-
-    try:
-        while True:
-            print("Waiting for client")
-            conn, addr = s.accept()
-        
-            print("Client:", addr)
-            
-            t = threading.Thread(target=handle_client, args=(conn, addr))
-            t.start()
-        
-            all_threads.append(t)
-    except KeyboardInterrupt:
-        print("Stopped by Ctrl+C")
-    finally:
-        if s:
-            s.close()
-        for t in all_threads:
-            t.join()
+    with ThreadPoolExecutor(max_workers=concurrency_level) as executor:
+        try:
+            while True:
+                print("Waiting for client")
+                conn, addr = s.accept()
+                executor.submit(handle_client, conn, addr)
+        except KeyboardInterrupt:
+            print("Stopped by Ctrl+C")
